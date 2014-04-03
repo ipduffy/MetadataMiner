@@ -26,7 +26,9 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
@@ -451,7 +453,9 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
                             // Increment the document count for the editor
                         }
                         
-                        g.addEdge(new EditorEdge(2.0), theAuthorNode, theEditorNode, EdgeType.DIRECTED);
+                        if(g.findEdge(theAuthorNode, theEditorNode) == null) {
+                            g.addEdge(new EditorEdge(2.0), theAuthorNode, theEditorNode, EdgeType.DIRECTED);
+                        }
                     }
                 }
             }
@@ -461,9 +465,12 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
             Layout<AuthorNode,EditorEdge> layout = new CircleLayout(g);
             layout.setSize(new Dimension(300,300)); // sets the initial size of the space
             // The BasicVisualizationServer<V,E> is parameterized by the edge types
-            BasicVisualizationServer<AuthorNode,EditorEdge> vv = 
-            new BasicVisualizationServer<AuthorNode,EditorEdge>(layout);
+            VisualizationViewer<AuthorNode,EditorEdge> vv = 
+            new VisualizationViewer<AuthorNode,EditorEdge>(layout);
             vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
+            DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
+            gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+            vv.setGraphMouse(gm);
 
             theFrame.getContentPane().add(vv, java.awt.BorderLayout.CENTER);
             theFrame.pack();
