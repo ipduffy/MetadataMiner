@@ -51,5 +51,8 @@ public class AuthorNode {
         }
         return true;
     }
-    
+
+    public String getName() {
+        return name;
+    }
 }

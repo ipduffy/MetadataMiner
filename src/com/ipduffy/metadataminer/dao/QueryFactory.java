@@ -910,6 +910,7 @@ public class QueryFactory {
                 AuthorEditorPair thePair = new AuthorEditorPair(getDocumentAuthor(theId), getDocumentEditor(theId));
                 thePairs.add(thePair);
             }
+            theDocumentIDs.close();
         } catch (SQLException e) {
             System.out.println("Error getting Author/Editor Pairs: " + e.toString());
             e.printStackTrace();

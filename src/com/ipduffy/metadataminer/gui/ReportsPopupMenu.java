@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import com.ipduffy.metadataminer.dao.*;
 import com.ipduffy.metadataminer.networkGraph.AuthorNode;
+import com.ipduffy.metadataminer.networkGraph.AuthorNodeLabeller;
 import com.ipduffy.metadataminer.networkGraph.EditorEdge;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -468,6 +469,7 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
             VisualizationViewer<AuthorNode,EditorEdge> vv = 
             new VisualizationViewer<AuthorNode,EditorEdge>(layout);
             vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
+            vv.getRenderContext().setVertexLabelTransformer(new AuthorNodeLabeller());
             DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
             gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
             vv.setGraphMouse(gm);
