@@ -5,10 +5,17 @@
 
 package com.ipduffy.metadataminer.gui;
 
+import com.ipduffy.metadataminer.core.Author;
+import com.ipduffy.metadataminer.core.AuthorEditorPair;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import com.ipduffy.metadataminer.dao.*;
+import com.ipduffy.metadataminer.networkGraph.AuthorNode;
+import com.ipduffy.metadataminer.networkGraph.EditorEdge;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import java.awt.Color;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.*;
@@ -16,6 +23,12 @@ import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.style.*;
 import net.sf.dynamicreports.report.constant.*;
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import java.awt.Dimension;
+import java.util.ArrayList;
 
 /**
  *
@@ -32,6 +45,7 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
     private JMenuItem mRevisionMenuItem = new JMenuItem("Most Heavily Edited Documents (by Revision Number)");
     private JMenuItem mPrintedDocsMenuItem = new JMenuItem("Recently Printed Documents");
     private JMenuItem mEditedDocsMenuItem = new JMenuItem("Recently Edited Documents");
+    private JMenuItem mNetworkGraphMenuItem = new JMenuItem("Network Graph");
 
     public ReportsPopupMenu() {
         super();
@@ -44,6 +58,8 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
         add(mRevisionMenuItem);
         add(mPrintedDocsMenuItem);
         add(mEditedDocsMenuItem);
+        add(new JSeparator());
+        add(mNetworkGraphMenuItem);
 
         mTopAuthorsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -90,6 +106,12 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
         mEditedDocsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 editedDocsMenuItemActionPerformed(evt);
+            }
+        });
+        
+        mNetworkGraphMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                networkGraphMenuItemActionPerformed(evt);
             }
         });
     }
@@ -397,6 +419,59 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
                 }
             } catch (Exception e) {
             }
+        }
+    }
+    
+    private void networkGraphMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
+        Graph g = new SparseMultigraph<AuthorNode, EditorEdge>();
+        
+        try {
+            QueryFactory theQueryFactory = DBConnectionManager.getQueryFactory();
+            ArrayList <AuthorEditorPair>thePairs = theQueryFactory.getAuthorEditorPairs();
+            if(thePairs.isEmpty()) {
+                // Alert the user to the fact that there are no author/editor pairs.
+            }
+            for(int i=0; i<thePairs.size(); i++) {
+                AuthorEditorPair thePair = thePairs.get(i);
+                Author theAuthor = thePair.getAuthor();
+                Author theEditor = thePair.getEditor();
+                
+                if (theAuthor != null) {
+                    AuthorNode theAuthorNode = new AuthorNode(theAuthor.getAuthorName());
+                    if (!g.containsVertex(theAuthorNode)) {
+                        g.addVertex(theAuthorNode);
+                    } else {
+                        // Increment the document count for the author
+                    }
+                    if (theEditor != null) {
+                        AuthorNode theEditorNode = new AuthorNode(theEditor.getAuthorName());
+                        if (!g.containsVertex(theEditorNode)) {
+                            g.addVertex(theEditorNode);
+                        } else {
+                            // Increment the document count for the editor
+                        }
+                        
+                        g.addEdge(new EditorEdge(2.0), theAuthorNode, theEditorNode, EdgeType.DIRECTED);
+                    }
+                }
+            }
+            
+            NetworkGraphFrame theFrame = new NetworkGraphFrame();
+            // The Layout<V, E> is parameterized by the vertex and edge types
+            Layout<AuthorNode,EditorEdge> layout = new CircleLayout(g);
+            layout.setSize(new Dimension(300,300)); // sets the initial size of the space
+            // The BasicVisualizationServer<V,E> is parameterized by the edge types
+            BasicVisualizationServer<AuthorNode,EditorEdge> vv = 
+            new BasicVisualizationServer<AuthorNode,EditorEdge>(layout);
+            vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
+
+            theFrame.getContentPane().add(vv, java.awt.BorderLayout.CENTER);
+            theFrame.pack();
+            theFrame.setVisible(true); 
+            //System.out.println(g.toString());
+        } catch (Exception e) {
+            System.out.println("Error building network graph: " + e.toString());
+            e.printStackTrace();
         }
     }
 }

@@ -119,8 +119,8 @@ public class OfficeXMLParser {
 
             theZipFile.close();
         } catch (IOException e) {
-            System.out.println("Error processing Office 2007 file " + mWorkingFile.getName() + "; invalid/corrupt file?");
-            e.printStackTrace();
+            System.out.println("Error processing Office Open XML file: \"" + mWorkingFile.getName() + "\"; invalid/corrupt/protected file?");
+            //e.printStackTrace();
         }
     }
 

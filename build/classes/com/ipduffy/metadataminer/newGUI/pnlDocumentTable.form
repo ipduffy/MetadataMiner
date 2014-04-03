@@ -66,28 +66,6 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
-          <BindingProperties>
-            <BindingProperty name="elements" source="documents" target="tblDocument" targetPath="elements" updateStrategy="0" immediately="true">
-              <Subbinding sourcePath="filename">
-                <BindingParameter name="NAME" value="Filename"/>
-              </Subbinding>
-              <Subbinding sourcePath="title">
-                <BindingParameter name="NAME" value="Title"/>
-              </Subbinding>
-              <Subbinding sourcePath="comments">
-                <BindingParameter name="NAME" value="Comments"/>
-              </Subbinding>
-              <Subbinding sourcePath="company">
-                <BindingParameter name="NAME" value="Company"/>
-              </Subbinding>
-              <Subbinding sourcePath="fullPath">
-                <BindingParameter name="NAME" value="Path"/>
-              </Subbinding>
-              <Subbinding sourcePath="md5">
-                <BindingParameter name="NAME" value="MD5"/>
-              </Subbinding>
-            </BindingProperty>
-          </BindingProperties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblDocumentMouseClicked"/>
           </Events>

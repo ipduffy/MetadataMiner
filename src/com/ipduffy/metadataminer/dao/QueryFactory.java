@@ -39,6 +39,8 @@ public class QueryFactory {
     private static PreparedStatement mAllDocumentsStatement = null;
     private static PreparedStatement mPrintedDocumentsStatement = null;
     private static PreparedStatement mEditedDocumentsStatement = null;
+    private static PreparedStatement mAllDocumentIDsStatement = null;
+    private static PreparedStatement mAuthorEditorPairsStatement = null;
            
             
     // Constructor
@@ -879,6 +881,41 @@ public class QueryFactory {
         }
 
         return theEditedDocuments;
+    }
+    
+    public ResultSet getAllDocumentIDs() {
+        ResultSet allDocumentIDs = null;
+
+        try {
+            if (mAllDocumentIDsStatement == null) {
+                mAllDocumentIDsStatement = mConnection.prepareStatement("SELECT id FROM document");
+            }
+
+            allDocumentIDs = mAllDocumentIDsStatement.executeQuery();
+        } catch (Exception e) {
+            System.out.println("Error getting all document IDs: " + e.toString());
+            e.printStackTrace();
+        }
+
+        return allDocumentIDs;
+    }
+    
+    public ArrayList getAuthorEditorPairs() {
+        ResultSet theDocumentIDs = getAllDocumentIDs();
+        ArrayList<AuthorEditorPair> thePairs = new ArrayList();
+
+        try {
+            while(theDocumentIDs.next()) {
+                long theId = theDocumentIDs.getLong(1);
+                AuthorEditorPair thePair = new AuthorEditorPair(getDocumentAuthor(theId), getDocumentEditor(theId));
+                thePairs.add(thePair);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting Author/Editor Pairs: " + e.toString());
+            e.printStackTrace();
+        }
+        
+        return thePairs;
     }
 
     /**

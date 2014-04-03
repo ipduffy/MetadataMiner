@@ -22,7 +22,7 @@ public class pnlDocumentTable extends javax.swing.JPanel {
     
     public pnlDocumentTable(ArrayList<Document> theDocuments) {
         initComponents();
-        documents.addAll(theDocuments);
+        //documents.addAll(theDocuments);
     }
 
     /**
