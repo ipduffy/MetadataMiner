@@ -4,18 +4,115 @@
  */
 package com.ipduffy.metadataminer.gui;
 
+import com.ipduffy.metadataminer.networkGraph.AuthorNode;
+import com.ipduffy.metadataminer.networkGraph.AuthorNodeLabeller;
+import com.ipduffy.metadataminer.networkGraph.EditorEdge;
+import com.ipduffy.metadataminer.networkGraph.EditorEdgeLabeller;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import java.awt.Dimension;
+import java.util.HashMap;
 
 /**
  *
  * @author iduffy
  */
 public class NetworkGraphFrame extends javax.swing.JFrame {
+    private HashMap<String,AuthorNode> vertexMap = new HashMap();
+    private Graph <AuthorNode,EditorEdge>mGraph;
     /**
      * Creates new form NetworkGraphFrame
      */
     public NetworkGraphFrame() {
         initComponents();
+        mGraph = new SparseMultigraph<AuthorNode, EditorEdge>();
+        this.pack();
+    }
+    
+    /** Use with document authors to increment the counter for
+     *  the number of documents that have been authored by that
+     *  individual.
+     * @param authorName 
+     */
+    public void addOrIncrementVertex(String authorName) {
+        if (authorName == null)
+                return;
+        if(vertexMap.containsKey(authorName)) {
+            AuthorNode theNode = vertexMap.get(authorName);
+            theNode.incrementDocumentCount();
+        } else {
+            AuthorNode theNode = new AuthorNode(authorName);
+            theNode.incrementDocumentCount();
+            mGraph.addVertex(theNode);
+            vertexMap.put(theNode.getName(), theNode);
+        }
+    }
+    
+    /** Use with document last editors to only add a vertex but not increment
+     *  it, since they were not the original author.
+     * @param editorName 
+     */
+    public void addVertex(String editorName) {
+        if (editorName == null)
+            return;
+        if (!vertexMap.containsKey(editorName)) {
+            AuthorNode theNode = new AuthorNode(editorName);
+            mGraph.addVertex(theNode);
+            vertexMap.put(theNode.getName(), theNode);
+        }
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        Layout<AuthorNode,EditorEdge> layout = new CircleLayout(mGraph);
+        layout.setSize(new Dimension(300,300));
+        VisualizationViewer<AuthorNode,EditorEdge> vv = new VisualizationViewer<AuthorNode,EditorEdge>(layout);
+        vv.setPreferredSize(new Dimension(350,350));
+        vv.getRenderContext().setVertexLabelTransformer(new AuthorNodeLabeller());
+        vv.getRenderContext().setEdgeLabelTransformer(new EditorEdgeLabeller());
+        DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
+        gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+        vv.setGraphMouse(gm);
+        
+        getContentPane().add(vv, java.awt.BorderLayout.CENTER);
+        super.setVisible(b); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void addOrIncrementEdge(String author, String editor) throws IllegalStateException {
+        if (author == null || editor == null)
+            return;
+        AuthorNode theAuthor = vertexMap.get(author);
+        AuthorNode theEditor = vertexMap.get(editor);
+        if (theAuthor == null) {
+            throw new IllegalStateException("Author vertex was not found in graph. Did you not add it yet?");
+        }
+        if (theEditor == null) {
+            throw new IllegalStateException("Editor vertex was not found in graph. Did you not add it yet?");
+        }
+        EditorEdge theEdge = mGraph.findEdge(theAuthor, theEditor);
+        
+        if (theEdge == null) {
+            theEdge = new EditorEdge(2.0);
+            mGraph.addEdge(theEdge, theAuthor, theEditor, EdgeType.DIRECTED);
+        } else {
+            theEdge.incrementDocumentCount();
+        }
+    }
+    
+    public AuthorNode getVertex(AuthorNode theNode) {
+        if (theNode == null)
+            return null;
+        return vertexMap.get(theNode.getName());
+    }
+    
+    public AuthorNode getVertex(String theName) {
+        return vertexMap.get(theName);
     }
 
     /**

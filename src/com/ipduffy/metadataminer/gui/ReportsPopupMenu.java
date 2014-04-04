@@ -32,6 +32,7 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -426,57 +427,32 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
     }
     
     private void networkGraphMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
-        Graph g = new SparseMultigraph<AuthorNode, EditorEdge>();
-        
         try {
             QueryFactory theQueryFactory = DBConnectionManager.getQueryFactory();
             ArrayList <AuthorEditorPair>thePairs = theQueryFactory.getAuthorEditorPairs();
+            
             if(thePairs.isEmpty()) {
-                // Alert the user to the fact that there are no author/editor pairs.
+                JOptionPane.showMessageDialog(this, "No Data", "No data in database.", JOptionPane.INFORMATION_MESSAGE);
             }
+            
+            NetworkGraphFrame ngf = new NetworkGraphFrame();
+            
             for(int i=0; i<thePairs.size(); i++) {
                 AuthorEditorPair thePair = thePairs.get(i);
                 Author theAuthor = thePair.getAuthor();
                 Author theEditor = thePair.getEditor();
                 
                 if (theAuthor != null) {
-                    AuthorNode theAuthorNode = new AuthorNode(theAuthor.getAuthorName());
-                    if (!g.containsVertex(theAuthorNode)) {
-                        g.addVertex(theAuthorNode);
-                    } else {
-                        // Increment the document count for the author
-                    }
+                    ngf.addOrIncrementVertex(theAuthor.getAuthorName());
+                    
                     if (theEditor != null) {
-                        AuthorNode theEditorNode = new AuthorNode(theEditor.getAuthorName());
-                        if (!g.containsVertex(theEditorNode)) {
-                            g.addVertex(theEditorNode);
-                        } else {
-                            // Increment the document count for the editor
-                        }
-                        
-                        if(g.findEdge(theAuthorNode, theEditorNode) == null) {
-                            g.addEdge(new EditorEdge(2.0), theAuthorNode, theEditorNode, EdgeType.DIRECTED);
-                        }
+                        ngf.addVertex(theEditor.getAuthorName());
+                        ngf.addOrIncrementEdge(theAuthor.getAuthorName(), theEditor.getAuthorName());
                     }
                 }
             }
             
-            NetworkGraphFrame theFrame = new NetworkGraphFrame();
-            // The Layout<V, E> is parameterized by the vertex and edge types
-            Layout<AuthorNode,EditorEdge> layout = new CircleLayout(g);
-            layout.setSize(new Dimension(300,300)); // sets the initial size of the space
-            // The BasicVisualizationServer<V,E> is parameterized by the edge types
-            VisualizationViewer<AuthorNode,EditorEdge> vv = 
-            new VisualizationViewer<AuthorNode,EditorEdge>(layout);
-            vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
-            vv.getRenderContext().setVertexLabelTransformer(new AuthorNodeLabeller());
-            DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
-            gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-            vv.setGraphMouse(gm);
-
-            theFrame.getContentPane().add(vv, java.awt.BorderLayout.CENTER);
-            theFrame.pack();
-            theFrame.setVisible(true); 
+            ngf.setVisible(true); 
             //System.out.println(g.toString());
         } catch (Exception e) {
             System.out.println("Error building network graph: " + e.toString());

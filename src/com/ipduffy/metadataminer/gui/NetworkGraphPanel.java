@@ -4,19 +4,39 @@
  */
 package com.ipduffy.metadataminer.gui;
 
+import com.ipduffy.metadataminer.networkGraph.AuthorNode;
+import com.ipduffy.metadataminer.networkGraph.AuthorNodeLabeller;
+import com.ipduffy.metadataminer.networkGraph.EditorEdge;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import java.awt.Dimension;
+import java.util.HashMap;
+
 /**
  *
  * @author iduffy
  */
 public class NetworkGraphPanel extends javax.swing.JPanel {
 
+    private HashMap<String,AuthorNode> vertexMap = new HashMap();
+    private Graph <AuthorNode,EditorEdge>mGraph;
     /**
      * Creates new form NetworkGraphPanel
      */
     public NetworkGraphPanel() {
         initComponents();
+        
+        
     }
 
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,16 +46,11 @@ public class NetworkGraphPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 300, Short.MAX_VALUE)
-        );
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setMinimumSize(new java.awt.Dimension(350, 350));
+        setPreferredSize(new java.awt.Dimension(350, 350));
+        setSize(new java.awt.Dimension(350, 350));
+        setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

@@ -14,7 +14,7 @@ public class AuthorNodeLabeller implements org.apache.commons.collections15.Tran
     }
 
     public String transform(AuthorNode i) {
-        return i.getName();
+        return i.getName() + ", " + i.getDocumentCount();
     }
     
 }

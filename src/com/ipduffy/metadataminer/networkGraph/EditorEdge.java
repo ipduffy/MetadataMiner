@@ -13,7 +13,7 @@ public class EditorEdge {
     private double weight;
     
     public EditorEdge(double weight) {
-        documentCount = 0;
+        documentCount = 1;
         this.weight = weight;
     }
 
