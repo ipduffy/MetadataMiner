@@ -10,6 +10,8 @@ package com.ipduffy.metadataminer.newGUI;
  */
 import com.ipduffy.metadataminer.core.Document;
 import java.util.ArrayList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class pnlDocumentTable extends javax.swing.JPanel {
 
@@ -22,7 +24,13 @@ public class pnlDocumentTable extends javax.swing.JPanel {
     
     public pnlDocumentTable(ArrayList<Document> theDocuments) {
         initComponents();
-        //documents.addAll(theDocuments);
+        mTableModel.addRows(theDocuments);
+        
+        tblDocument.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                updateFields();
+            }
+        });
     }
 
     /**
@@ -34,45 +42,27 @@ public class pnlDocumentTable extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        mTableModel = new com.ipduffy.metadataminer.table.DocumentTableModel();
         spDocumentTable = new javax.swing.JScrollPane();
         tblDocument = new javax.swing.JTable();
         lblFilename = new javax.swing.JLabel();
-        txtFilename = new javax.swing.JTextField();
         lblPath = new javax.swing.JLabel();
         txtPath = new javax.swing.JTextField();
         lblMD5 = new javax.swing.JLabel();
         txtMD5 = new javax.swing.JTextField();
+        txtFileName = new javax.swing.JTextField();
 
         setLayout(new java.awt.GridBagLayout());
 
+        tblDocument.setModel(mTableModel);
         tblDocument.setColumnSelectionAllowed(true);
-
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, new java.util.ArrayList(), tblDocument);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("filename"));
-        columnBinding.setColumnName("Filename");
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("title"));
-        columnBinding.setColumnName("Title");
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("comments"));
-        columnBinding.setColumnName("Comments");
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("company"));
-        columnBinding.setColumnName("Company");
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("fullPath"));
-        columnBinding.setColumnName("Path");
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("md5"));
-        columnBinding.setColumnName("MD5");
-        bindingGroup.addBinding(jTableBinding);
-        jTableBinding.bind();
-        tblDocument.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblDocumentMouseClicked(evt);
-            }
-        });
         spDocumentTable.setViewportView(tblDocument);
         tblDocument.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -82,25 +72,22 @@ public class pnlDocumentTable extends javax.swing.JPanel {
 
         lblFilename.setText("File Name:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblFilename, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, tblDocument, org.jdesktop.beansbinding.ELProperty.create("${rowCount}"), txtFilename, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(txtFilename, gridBagConstraints);
-
         lblPath.setText("Path:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblPath, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -108,32 +95,52 @@ public class pnlDocumentTable extends javax.swing.JPanel {
 
         lblMD5.setText("MD5 Hash:");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblMD5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(txtMD5, gridBagConstraints);
-
-        bindingGroup.bind();
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(txtFileName, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblDocumentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDocumentMouseClicked
-
-    }//GEN-LAST:event_tblDocumentMouseClicked
-
+    private void updateFields() {
+        int theRow = tblDocument.getSelectedRow();
+        Document theDocument = mTableModel.getDocumentAtRow(theRow);
+        if (theDocument != null) {
+            txtFileName.setText(theDocument.getFilename());
+            txtMD5.setText(theDocument.getMd5());
+            txtPath.setText(theDocument.getFullPath());
+        } else {
+            txtFileName.setText("");
+            txtMD5.setText("");
+            txtPath.setText("");
+        }
+        txtFileName.setCaretPosition(0);
+        txtMD5.setCaretPosition(0);
+        txtPath.setCaretPosition(0);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblFilename;
     private javax.swing.JLabel lblMD5;
     private javax.swing.JLabel lblPath;
+    private com.ipduffy.metadataminer.table.DocumentTableModel mTableModel;
     private javax.swing.JScrollPane spDocumentTable;
     private javax.swing.JTable tblDocument;
-    private javax.swing.JTextField txtFilename;
+    private javax.swing.JTextField txtFileName;
     private javax.swing.JTextField txtMD5;
     private javax.swing.JTextField txtPath;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,6 +19,7 @@ public class SearchResultsTablePanel extends javax.swing.JPanel {
     /** Creates new form SearchResultsTablePanel */
     public SearchResultsTablePanel(ArrayList theList) {
         initComponents();
+        tblModel.mData = theList;
 
         for (int i=0; i < tblModel.getColumnCount(); i++) {
             tblSearchData.setDefaultRenderer(tblSearchData.getColumnClass(i), new DocumentCellRenderer());

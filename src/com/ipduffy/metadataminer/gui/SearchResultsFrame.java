@@ -48,6 +48,8 @@ public class SearchResultsFrame extends javax.swing.JFrame {
                 btnCloseActionPerformed(arg0);
             }
         });
+        
+        lblDocumentCount.setText(theList.size() + " documents matched search parameters.");
     }
 
     /** This method is called from within the constructor to
@@ -62,6 +64,7 @@ public class SearchResultsFrame extends javax.swing.JFrame {
         tbSearch = new javax.swing.JToolBar();
         btnExcel = new javax.swing.JButton();
         pnlDocumentTable = new com.ipduffy.metadataminer.newGUI.pnlDocumentTable(mDocumentList);
+        lblDocumentCount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Search Results: Documents");
@@ -88,8 +91,11 @@ public class SearchResultsFrame extends javax.swing.JFrame {
         getContentPane().add(tbSearch, java.awt.BorderLayout.PAGE_START);
         getContentPane().add(pnlDocumentTable, java.awt.BorderLayout.CENTER);
 
-        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-651)/2, (screenSize.height-331)/2, 651, 331);
+        lblDocumentCount.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        getContentPane().add(lblDocumentCount, java.awt.BorderLayout.PAGE_END);
+
+        setSize(new java.awt.Dimension(651, 331));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
@@ -137,6 +143,7 @@ public class SearchResultsFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExcel;
+    private javax.swing.JLabel lblDocumentCount;
     private com.ipduffy.metadataminer.newGUI.pnlDocumentTable pnlDocumentTable;
     private javax.swing.JToolBar tbSearch;
     // End of variables declaration//GEN-END:variables

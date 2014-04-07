@@ -99,7 +99,7 @@ public class SearchFrame extends javax.swing.JFrame {
                 }
             }
 
-            if (theList != null) {
+            if (theList != null && theList.size() > 0) {
                 new SearchResultsFrame(theList).setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "No matching Documents found.", null, JOptionPane.INFORMATION_MESSAGE);

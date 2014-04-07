@@ -26,12 +26,17 @@ import java.util.HashMap;
 public class NetworkGraphFrame extends javax.swing.JFrame {
     private HashMap<String,AuthorNode> vertexMap = new HashMap();
     private Graph <AuthorNode,EditorEdge>mGraph;
+    DefaultModalGraphMouse gm;
+    
     /**
      * Creates new form NetworkGraphFrame
      */
     public NetworkGraphFrame() {
         initComponents();
         mGraph = new SparseMultigraph<AuthorNode, EditorEdge>();
+        gm = new DefaultModalGraphMouse();
+        NetworkGraphToolbar ngtb = new NetworkGraphToolbar(gm);
+        getContentPane().add(ngtb, java.awt.BorderLayout.NORTH);
         this.pack();
     }
     
@@ -76,7 +81,6 @@ public class NetworkGraphFrame extends javax.swing.JFrame {
         vv.setPreferredSize(new Dimension(350,350));
         vv.getRenderContext().setVertexLabelTransformer(new AuthorNodeLabeller());
         vv.getRenderContext().setEdgeLabelTransformer(new EditorEdgeLabeller());
-        DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
         gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         vv.setGraphMouse(gm);
         
