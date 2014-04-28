@@ -7,32 +7,20 @@ package com.ipduffy.metadataminer.gui;
 
 import com.ipduffy.metadataminer.core.Author;
 import com.ipduffy.metadataminer.core.AuthorEditorPair;
+import com.ipduffy.metadataminer.dao.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
-import com.ipduffy.metadataminer.dao.*;
-import com.ipduffy.metadataminer.networkGraph.AuthorNode;
-import com.ipduffy.metadataminer.networkGraph.AuthorNodeLabeller;
-import com.ipduffy.metadataminer.networkGraph.EditorEdge;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import java.awt.Color;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.*;
+import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.style.*;
 import net.sf.dynamicreports.report.constant.*;
-import static net.sf.dynamicreports.report.builder.DynamicReports.*;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -279,8 +267,8 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
 
         TextColumnBuilder fileNameColumn = col.column("File name", "filename", type.stringType());
         TextColumnBuilder md5Column = col.column("MD5 Hash", "md5", type.stringType());
-        TextColumnBuilder revisionColumn = col.column("Revision", "revision", type.integerType());
-        TextColumnBuilder editingTimeColumn = col.column("Editing Time", "editingtime", type.integerType());
+        TextColumnBuilder revisionColumn = col.column("Revision", "revision", type.stringType());
+        TextColumnBuilder editingTimeColumn = col.column("Editing Time", "editingtime", type.stringType());
 
         StyleBuilder boldStyle = stl.style().bold();
         StyleBuilder boldCenteredStyle = stl.style(boldStyle).setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -316,8 +304,8 @@ public class ReportsPopupMenu extends javax.swing.JPopupMenu {
 
         TextColumnBuilder fileNameColumn = col.column("File name", "filename", type.stringType());
         TextColumnBuilder md5Column = col.column("MD5 Hash", "md5", type.stringType());
-        TextColumnBuilder editingTimeColumn = col.column("Editing Time", "editingtime", type.integerType());
-        TextColumnBuilder revisionColumn = col.column("Revision", "revision", type.integerType());
+        TextColumnBuilder editingTimeColumn = col.column("Editing Time", "editingtime", type.stringType());
+        TextColumnBuilder revisionColumn = col.column("Revision", "revision", type.stringType());
 
         StyleBuilder boldStyle = stl.style().bold();
         StyleBuilder boldCenteredStyle = stl.style(boldStyle).setHorizontalAlignment(HorizontalAlignment.CENTER);

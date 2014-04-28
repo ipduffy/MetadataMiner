@@ -5,11 +5,11 @@
 
 package com.ipduffy.metadataminer.gui;
 
+import com.ipduffy.metadataminer.parsers.*;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.swing.JOptionPane;
 import org.apache.poi.poifs.eventfilesystem.*;
-import com.ipduffy.metadataminer.parsers.*;
 
 /**
  *
@@ -49,8 +49,14 @@ public class ParserThread extends java.lang.Thread {
     }
 
     private void processDirectory(File aFile) {
+        if (aFile == null) {
+            return;
+        }
         if (aFile.isDirectory()) {
             String[] children = aFile.list();
+            if (children == null) {
+                return;
+            }
             for (int i=0; i<children.length; i++) {
                 processDirectory(new File(aFile, children[i]));
             }
