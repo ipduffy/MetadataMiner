@@ -34,5 +34,3 @@ When the appropriate directory has been chosen, click "Go" and MetadataMiner wil
 Parsing does not take very long - it parses at a rate of around 1000 documents per minutee, although this is largely dependent on hardware. MetadataMiner has been tested on document repositories as large as 50,000+ documents. To parse this many documents took approximately 45 minutes. Smaller document collections should finish much more quickly.
 
 Once MetadataMiner is completed parsing the documents in the Working Directory, the data collected can be searched using the search button. Reports can be created by clicking on the reports button.
-
-For bug reports, feature requests, or suggestions, please contact ipduffy <at> yahoo <dot> com
